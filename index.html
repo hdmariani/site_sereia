@@ -2600,14 +2600,15 @@ tracker.send("pageview")
 
     var navBar = document.querySelector("ul.nav.navbar-nav.navbar-right");
     var botaoOrcamento = document.querySelector("a.page-scroll.btn.btn-xl");
-    var redesSociais = document.querySelector("footer ul");
+    var redesSociais = Array.from(document.querySelectorAll("ul.list-inline.social-buttons"));
     var form = document.querySelector("form");
     var preenchimentoForm=[];
 
-    function clickHandler(category, action, label, cd1="", cm1=""){
+    function clickHandler(category, action, label, valor="", cd1="", cm1=""){
         tracker.send("evento",{
             'category': `${category}`,
             'action': `${action}`,
+            'value': `${valor}`,
             'label': `${label}`,
             'cd1': `${cd1}`,
             'cm1': `${cm1}`
@@ -2650,21 +2651,43 @@ tracker.send("pageview")
         clickHandler("evento", "clique",`NAVBAR: ${nome}`)
     })
 
+
 // <!-- Tag de clique nas REDES SOCIAIS  -->
 
-    redesSociais.addEventListener('click', ev => {
-
-        if(ev.target.tagName === "I"){
-            var campo = ev.target.classList[1].slice(3);
-        }else{
-            var campo = ev.target.querySelector("i").className.slice(5);
+    redesSociais.map((item, i)=>{
+        switch(i){
+            case 0:
+                item.dev = "Sereia Morelli";
+                break;
+            case 1:
+                item.dev = "Cajo Bundchen";
+                break;
+            case 2:
+                item.dev = "Pumba Joy";
+                break;
+            case 3:
+                item.dev = "footer";
         }
-        clickHandler("evento", "clique", campo)
+  
+    })
+
+
+    redesSociais.forEach((item) => {
+        item.addEventListener('click', ev => {
+            var dev = item.dev;
+            if(ev.target.tagName === "I"){
+                var campo = ev.target.className.slice(6);
+            }else{
+                var campo = ev.target.querySelector("i").className.slice(6);
+            }
+            clickHandler("evento", "clique", campo, dev);
+        })     
     })
 
 //<!-- Tag de Visualização de formulário -->
 
     window.addEventListener("scroll", () => {
+        
         var campoTelefone = document.querySelector("#phone");
         var campoTelefoneInferior = campoTelefone.getBoundingClientRect().bottom;
         if(campoTelefoneInferior <= window.innerHeight && !campoTelefone.gtmVisualizou){
