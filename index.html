@@ -2561,6 +2561,152 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }, Math.random() * 12000 + 5000);
   </script>
 
+  
+<!-- TAGS -->
+<script>
+(function(){
+
+//    <!-- Instalação da biblioteca Banhytics -->
+
+//tn: tracker name
+//tc: tracher code
+//cn: cookie name
+(function(tn, tc, cn) {
+  window[tn] = window[tn] || {
+    status: "loading_code",
+    code: tc,
+    cookieName: cn,
+    queue: [],
+    send: function(a, d){
+      d = d || {};
+      window[tn].queue.push({
+        a: a,
+        d: Object.assign(d, {timestamp: Date.now()})
+      });
+    }
+  };
+
+  if(window[tn].status == "loading_code") {
+    window[tn].status = "waiting_script";
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://script.google.com/macros/s/" + tc + "/dev/library?tn=" + tn;
+    document.body.appendChild(s);
+  }
+})("tracker", "AKfycbzWsFD7ShQWYBgmeQaELkt_fj_9zfEaVqsoPc6o8QE", "_trackerCk");
+tracker.send("pageview")
+
+//<!-- Funções auxiliares para as Tags -->
+
+    var navBar = document.querySelector("ul.nav.navbar-nav.navbar-right");
+    var botaoOrcamento = document.querySelector("a.page-scroll.btn.btn-xl");
+    var redesSociais = document.querySelector("footer ul");
+    var form = document.querySelector("form");
+    var preenchimentoForm=[];
+
+    function clickHandler(category, action, label, cd1="", cm1=""){
+        tracker.send("evento",{
+            'category': `${category}`,
+            'action': `${action}`,
+            'label': `${label}`,
+            'cd1': `${cd1}`,
+            'cm1': `${cm1}`
+        })
+    }
+
+    function scrollHandler(category, action, label, cd1="", cm1=""){
+
+        tracker.send("evento",{
+            'category': `${category}`,
+            'action': `${action}`,
+            'label': `${label}`,
+            'cd1': `${cd1}`,
+            'cm1': `${cm1}`
+        })
+    }
+    
+    function formHandler(category, action, label, valor="", cd1="", cm1=""){
+    tracker.send("evento",{
+        'category': category,
+        'action': action,
+        'label': label,
+        'value': valor,
+        'cd1': cd1,
+        'cm1': cm1
+})
+}
+
+
+//<!-- Tag de clique no botão orçamento -->
+
+    botaoOrcamento.addEventListener("click", () => {
+        clickHandler("orçamento", "clique", "botão orçamento");
+    })
+
+//<!-- Tag de clique nos botões do NAVBAR  -->
+
+    navBar.addEventListener('click', (ev) => {
+        var nome = ev.target.innerText;
+        clickHandler("evento", "clique",`NAVBAR: ${nome}`)
+    })
+
+// <!-- Tag de clique nas REDES SOCIAIS  -->
+
+    redesSociais.addEventListener('click', ev => {
+
+        if(ev.target.tagName === "I"){
+            var campo = ev.target.classList[1].slice(3);
+        }else{
+            var campo = ev.target.querySelector("i").className.slice(5);
+        }
+        clickHandler("evento", "clique", campo)
+    })
+
+//<!-- Tag de Visualização de formulário -->
+
+    window.addEventListener("scroll", () => {
+        var campoTelefone = document.querySelector("#phone");
+        var campoTelefoneInferior = campoTelefone.getBoundingClientRect().bottom;
+        if(campoTelefoneInferior <= window.innerHeight && !campoTelefone.gtmVisualizou){
+            scrollHandler("evento", "scroll", "visualizou formulario");
+            campoTelefone.gtmVisualizou = true;
+}})
+
+//<!--  Tag Preenchimento de formulário -->
+
+    form.addEventListener('change', (ev) =>  { 
+
+        if(ev.target.value && ev.target.gtmPreenchido){
+            return}
+        
+        
+        if(!ev.target.gtmPreenchido){    
+            var campo = ev.target.attributes.placeholder.value.slice(0,-2);
+            preenchimentoForm.push(1);
+            var porcentagemPreenchida = (preenchimentoForm.length/4)*100;
+            ev.target.gtmPreenchido = true;
+            formHandler("formulario", "preenchimento", `Campo: ${campo}`, encodeURIComponent(porcentagemPreenchida + "%"));   
+    }})
+
+    //<!-- Tag Envio de Formulário -->
+
+    form.addEventListener("submit", () => {
+        formHandler("formulario", "envio", "submit")
+        preenchimentoForm = [];
+
+        var campos = Array.from(form.querySelectorAll("input"));
+        campos.push(form.querySelector("textarea"));
+        
+        campos.forEach(campo => {
+        campo.gtmPreenchido = false;
+        })
+
+    })
+  })()
+</script>
+  
+  
+  
 </body>
 
 </html>
