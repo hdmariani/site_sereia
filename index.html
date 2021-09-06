@@ -2604,38 +2604,55 @@ tracker.send("pageview")
     var form = document.querySelector("form");
     var preenchimentoForm=[];
 
-    function clickHandler(category, action, label, valor="", cd1="", cm1=""){
-        tracker.send("evento",{
-            'category': `${category}`,
-            'action': `${action}`,
-            'value': `${valor}`,
-            'label': `${label}`,
-            'cd1': `${cd1}`,
-            'cm1': `${cm1}`
-        })
-    }
+        function clickHandler(category, action, label, valor="", cd1="", cm1=""){
+            tracker.send("evento",{
+                'category': `${category}`,
+                'action': `${action}`,
+                'value': `${valor}`,
+                'label': `${label}`,
+                'cd1': `${cd1}`,
+                'cm1': `${cm1}`
+            })
 
-    function scrollHandler(category, action, label, cd1="", cm1=""){
-
-        tracker.send("evento",{
-            'category': `${category}`,
-            'action': `${action}`,
-            'label': `${label}`,
-            'cd1': `${cd1}`,
-            'cm1': `${cm1}`
-        })
-    }
+            ga('send', 'event' {
+              'eventCategory': category,
+              'eventAction': action,
+              'eventLabel': label,
+            })
+        }
     
-    function formHandler(category, action, label, valor="", cd1="", cm1=""){
-    tracker.send("evento",{
-        'category': category,
-        'action': action,
-        'label': label,
-        'value': valor,
-        'cd1': cd1,
-        'cm1': cm1
-})
-}
+        function scrollHandler(category, action, label, cd1="", cm1=""){
+    
+            tracker.send("evento",{
+                'category': `${category}`,
+                'action': `${action}`,
+                'label': `${label}`,
+                'cd1': `${cd1}`,
+                'cm1': `${cm1}`
+            })
+            
+            ga('send', 'event' {
+              'eventCategory': category,
+              'eventAction': action,
+              'eventLabel': label,
+            })
+        }
+        
+        function formHandler(category, action, label, valor="", cd1="", cm1=""){
+        tracker.send("evento",{
+            'category': category,
+            'action': action,
+            'label': label,
+            'value': valor,
+            'cd1': cd1,
+            'cm1': cm1
+    })
+            ga('send', 'event' {
+              'eventCategory': category,
+              'eventAction': action,
+              'eventLabel': label,
+            })
+    }
 
 
 //<!-- Tag de clique no botão orçamento -->
