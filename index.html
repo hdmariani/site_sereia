@@ -2603,6 +2603,8 @@ tracker.send("pageview")
     var redesSociais = Array.from(document.querySelectorAll("ul.list-inline.social-buttons"));
     var form = document.querySelector("form");
     var preenchimentoForm=[];
+    var popup = document.querySelector("img#call-me-baby");
+
 
         function clickHandler(category, action, label, valor="", cd1="", cm1=""){
             tracker.send("evento",{
