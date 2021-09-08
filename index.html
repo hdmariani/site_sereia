@@ -2658,14 +2658,14 @@ tracker.send("pageview")
 //<!-- Tag de clique no botão orçamento -->
 
     botaoOrcamento.addEventListener("click", () => {
-        clickHandler("orçamento", "clique", "botão orçamento");
+        clickHandler("event", "click", "botão orçamento");
     })
 
 //<!-- Tag de clique nos botões do NAVBAR  -->
 
     navBar.addEventListener('click', (ev) => {
         var nome = ev.target.innerText;
-        clickHandler("evento", "clique",`NAVBAR: ${nome}`)
+        clickHandler("event", "click",`NAVBAR: ${nome}`)
     })
 
 
@@ -2697,21 +2697,29 @@ tracker.send("pageview")
             }else{
                 var campo = ev.target.querySelector("i").className.slice(6);
             }
-            clickHandler("evento", "clique", campo, dev);
+            clickHandler("event", "click", campo, dev);
         })     
     })
 
-//<!-- Tag de Visualização de formulário -->
+  //<!-- Tag de Visualização de formulário e POPUP -->
+      var observerOptions = {
+        rootMargin: '0px',
+        threshold: 0.4
+      }
+      var formView = new IntersectionObserver(function(entry, formView){
+        if(entry[0].isIntersecting){
+          formHandler("event", "view", "viu formulario")
+        }
+      } ,observerOptions)
+      formView.observe(form)
 
-    window.addEventListener("scroll", () => {
-        
-        var campoTelefone = document.querySelector("#phone");
-        var campoTelefoneInferior = campoTelefone.getBoundingClientRect().bottom;
-        if(campoTelefoneInferior <= window.innerHeight && !campoTelefone.gtmVisualizou){
-            scrollHandler("evento", "scroll", "visualizou formulario");
-            campoTelefone.gtmVisualizou = true;
-}})
 
+      var formView = new IntersectionObserver(function(entry, formView){
+        if(entry[0].isIntersecting){
+          formHandler("event", "view", "viu popup")
+        }
+      } ,observerOptions)
+      formView.observe(popup)
 //<!--  Tag Preenchimento de formulário -->
 
     form.addEventListener('change', (ev) =>  { 
@@ -2725,13 +2733,13 @@ tracker.send("pageview")
             preenchimentoForm.push(1);
             var porcentagemPreenchida = (preenchimentoForm.length/4)*100;
             ev.target.gtmPreenchido = true;
-            formHandler("formulario", "preenchimento", `Campo: ${campo}`, encodeURIComponent(porcentagemPreenchida + "%"));   
+            formHandler("event", "fill", `Campo: ${campo}`, encodeURIComponent(porcentagemPreenchida + "%"));   
     }})
 
     //<!-- Tag Envio de Formulário -->
 
     form.addEventListener("submit", () => {
-        formHandler("formulario", "envio", "submit")
+        formHandler("event", "submit", "submit")
         preenchimentoForm = [];
 
         var campos = Array.from(form.querySelectorAll("input"));
